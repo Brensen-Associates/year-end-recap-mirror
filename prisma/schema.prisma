@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator kysely {
+  provider = "prisma-kysely"
+  output   = "../src/db"
+  fileName = "types.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model repos {
+  id                Int       @id @default(autoincrement())
+  name              String?
+  url               String?   @unique
+  ssh_url           String?
+  created_date      DateTime? @default(now()) @db.Timestamp(6)
+  updated_date      DateTime? @default(now()) @db.Timestamp(6)
+  duplicate_authors Json?     @db.Json
+  data              Json?     @db.Json
+}
+
+model signups {
+  id              Int       @id @default(autoincrement())
+  email           String?
+  signup_datetime DateTime? @db.Date
+}
